@@ -1,19 +1,32 @@
 package edu.ap.spring.models;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
+@Embeddable
 public class JokeValue {
-	private String Id;
+	
+	@Id
+	private Long Id;
+	
+	@Column
 	private String Joke;
+	
+	@Column
 	private String[] Categories;
 	
 	public JokeValue() {
 		super();
 	}
 
-	public String getId() {
+	public Long getId() {
 		return Id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		Id = id;
 	}
 

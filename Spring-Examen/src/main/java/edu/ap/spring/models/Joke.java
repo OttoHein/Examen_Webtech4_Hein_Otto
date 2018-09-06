@@ -1,19 +1,28 @@
 package edu.ap.spring.models;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
 public class Joke {
 	
+	static int idteller = 0;
+	
+	@Id
+    private Long Id;
+	
 	@Column
 	private String type;
 	
-	@Column
+	@Embedded
 	private JokeValue value;
 	
 	public Joke() {
 		super();
+		idteller +=1;
+		this.Id = (long) idteller;
 	}
 
 
