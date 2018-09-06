@@ -98,6 +98,7 @@ public class JokeController {
 	   
 		if(repository.findAll() != null) {
 			repository.save(joke);
+			System.out.println("Joke saved!");
 		}
 		
 	   StringBuilder builder = new StringBuilder();
