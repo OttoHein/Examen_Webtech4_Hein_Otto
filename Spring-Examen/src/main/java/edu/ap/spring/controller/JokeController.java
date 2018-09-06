@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +17,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import edu.ap.spring.jpa.JokeRepository;
 import edu.ap.spring.models.Joke;
 
 @Controller
@@ -23,6 +26,13 @@ public class JokeController {
    
    public JokeController() {
    }
+   
+   private JokeRepository repository;
+   
+   @Autowired
+	public void setUserRepository(JokeRepository repository) {
+		this.repository = repository;
+	}
        
    @RequestMapping("/joke")
    @ResponseBody
@@ -86,6 +96,10 @@ public class JokeController {
 			e.printStackTrace();
 		}
 	   
+		if(repository.findAll() != null) {
+			repository.save(joke);
+		}
+		
 	   StringBuilder builder = new StringBuilder();
 	   
 	   builder.append("<html><body><h1>Here's your bad joke:</h1><p>");

@@ -1,7 +1,15 @@
 package edu.ap.spring.models;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+
+@Entity
 public class Joke {
+	
+	@Column
 	private String type;
+	
+	@Column
 	private JokeValue value;
 	
 	public Joke() {
