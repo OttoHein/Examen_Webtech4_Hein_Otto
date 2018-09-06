@@ -5,13 +5,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import org.json.JSONObject;
-
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import edu.ap.spring.models.Joke;
 
 @Controller
 @Scope("session")
@@ -42,7 +46,10 @@ public class JokeController {
    public String joke_post(@RequestParam("firstname") String firstname, @RequestParam("lastname") String lastname) {
 	   
 	   URL url;
-	   String joke = new String();
+	   String result = new String();
+	   ObjectMapper objectMapper = new ObjectMapper();
+	   Joke joke = new Joke();
+	   
 	try {
 		url = new URL("http://api.icndb.com/jokes/random?firstName=" + firstname + "&lastName=" + lastname);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -58,17 +65,31 @@ public class JokeController {
 				}
 				in.close();
 				
-		joke =content.toString();
+		result = content.toString();
+		
 				
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
+	
+		try {
+			joke = objectMapper.readValue(result, Joke.class);
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	   
 	   StringBuilder builder = new StringBuilder();
 	   
-	   builder.append("<html><body><p>");
-	   builder.append(joke);
+	   builder.append("<html><body><h1>Here's your bad joke:</h1><p>");
+	   builder.append(joke.getValue().getJoke());
 	   builder.append("</p></body></html>");
 	   
 	   return builder.toString();
